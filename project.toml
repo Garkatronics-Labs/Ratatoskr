@@ -1,0 +1,26 @@
+# https://github.com/odin-lang/Odin/wiki/Compiler-Flags
+
+[project]
+name = "Ratatoskr"
+version = "0.1.0"
+authors = ["@Garkatron"]
+path = "./src"
+
+[output]
+development = "./out/dev-rtt"
+release = "./out/rtt"
+debug = "./out/debug-rtt"
+
+[collections]
+libs = "../libs"
+
+[compiler]
+build_mode      = "exe"
+debug           = false
+ignore_warnings = false
+disallow_do     = false
+
+[compiler.defines]
+
+
+[compiler.raw]
