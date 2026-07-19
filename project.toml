@@ -7,9 +7,9 @@ authors = ["@Garkatron"]
 path = "./src"
 
 [output]
-development = "./out/dev-rtt"
-release = "./out/rtt"
-debug = "./out/debug-rtt"
+development = "./out/dev-rtt-linux-amd64"
+release = "./out/rtt-linux-amd64"
+debug = "./out/debug-rtt-linux-amd64"
 
 [collections]
 libs = "./libs"
