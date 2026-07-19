@@ -59,7 +59,7 @@ jobs:
             - name: Build project with rtt
               run: |
                   mkdir -p out
-                  ./rtt build --release
+                  ./rtt build
 
             - name: Upload artifact
               uses: actions/upload-artifact@v4
