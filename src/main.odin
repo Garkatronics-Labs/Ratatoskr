@@ -24,15 +24,26 @@ main :: proc() {
 		release := false
 		debug := false
 		development := false
+		config_path := ""
+
+
 
 		for arg in rest {
-			switch arg {
-			case "--release":     release = true
-			case "--debug":       debug = true
-			case "--development": development = true
+
+			switch {
+			case arg == "--release":
+				release = true
+			case arg == "--debug":
+				debug = true
+			case arg == "--development":
+				development = true
+			case strings.has_prefix(arg, "--config="):
+				config_path = arg[len("--config="):]
 			case:
 				fmt.eprintfln("unknown flag: %s", arg)
 				os.exit(1)
+
+
 			}
 		}
 
@@ -42,7 +53,7 @@ main :: proc() {
 			os.exit(1)
 		}
 
-		cmd_build(release, debug, development)
+		cmd_build(release, debug, development, config_path)
 
 	case "add-collection":
 		if len(rest) < 1 {
@@ -96,8 +107,8 @@ main :: proc() {
 
 // --- build ---------------------------------------------------------------
 
-cmd_build :: proc(release, debug, development: bool) {
-	cfg, ok := load_project_config()
+cmd_build :: proc(release, debug, development: bool, config_path: string) {
+	cfg, ok := load_project_config(config_path)
 	if !ok {
 		log.error("failed to load project config")
 		os.exit(1)
@@ -175,7 +186,7 @@ development_mode :: proc(cfg: Project_Config) -> bool {
 	return run_command(strings.to_string(sb))
 }
 
-load_project_config :: proc() -> (cfg: Project_Config, ok: bool) {
+load_project_config :: proc(config_path: string = "") -> (cfg: Project_Config, ok: bool) {
 	log.info("loading project config")
 
 	dir, w_err := os.get_working_directory(context.allocator)
@@ -186,13 +197,18 @@ load_project_config :: proc() -> (cfg: Project_Config, ok: bool) {
 		return {}, false
 	}
 
-	file_path, err := filepath.join([]string{dir, "project.toml"})
-	defer delete(file_path)
-
-	if err != .None {
-		log.error("failed to join project.toml path")
-		return {}, false
+	file_path: string
+	if config_path != "" {
+		file_path = config_path
+	} else {
+		file_path, err := filepath.join([]string{dir, "project.toml"})
+		defer delete(file_path)
+		if err != .None {
+			log.error("failed to join project.toml path")
+			return {}, false
+		}
 	}
+
 
 	data, r_err := os.read_entire_file(file_path, context.allocator)
 	defer delete(data)

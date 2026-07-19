@@ -1,0 +1,25 @@
+# https://github.com/odin-lang/Odin/wiki/Compiler-Flags
+
+[project]
+name = "Toml"
+version = "0.1.0"
+authors = ["@Garkatron"]
+path = "./src"
+
+[output]
+development = "./out/dev-toml"
+release = "./out/toml"
+debug = "./out/dbg-toml"
+
+[collections]
+
+[compiler]
+build_mode      = "exe"
+debug           = false
+ignore_warnings = false
+disallow_do     = false
+
+[compiler.defines]
+
+
+[compiler.raw]

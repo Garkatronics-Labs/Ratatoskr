@@ -1,0 +1,18 @@
+{
+    "format_on_save": "on",
+    "remove_trailing_whitespace_on_save": true,
+    "ensure_final_newline_on_save": true,
+    "tab_size": 4,
+    "lsp": {
+        "ols": {
+            "initialization_options": {
+                "collections": [
+                    {
+                        "name": "libs",
+                        "path": "libs",
+                    },
+                ],
+            },
+        },
+    },
+}
