@@ -30,8 +30,10 @@ jobs:
               if: steps.cache-odin.outputs.cache-hit != 'true'
               run: |
                   mkdir -p odin-dist
-                  curl -L -o odin.tar.gz \
-                      https://github.com/odin-lang/Odin/releases/download/${{ steps.odin-tag.outputs.tag }}/odin-linux-amd64-${{ steps.odin-tag.outputs.tag }}.tar.gz
+                  curl -L --fail -o odin.tar.gz \
+                  https://github.com/odin-lang/Odin/releases/download/${{ steps.odin-tag.outputs.tag }}/odin-linux-amd64-${{ steps.odin-tag.outputs.tag }}.tar.gz
+                  ls -la odin.tar.gz
+                  tar -tzf odin.tar.gz > /dev/null
                   tar -xzf odin.tar.gz -C odin-dist --strip-components=1
 
             - name: Add Odin to PATH
