@@ -59,7 +59,9 @@ jobs:
             - name: Build project with rtt
               run: |
                   mkdir -p out
-                  ./rtt build
+                  ./rtt build --release
+                  ./rtt build --debug
+                  ./rtt build --development
 
             - name: Upload artifact
               uses: actions/upload-artifact@v4
