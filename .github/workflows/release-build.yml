@@ -14,6 +14,15 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Install Odin
+              run: |
+                  git clone --depth 1 https://github.com/odin-lang/Odin.git
+                  cd Odin
+                  ./build_odin.sh release
+                  echo "$PWD" >> $GITHUB_PATH
+
+            - uses: actions/checkout@v4
+
             - name: Download rtt (release binary)
               run: |
                   curl -L -o rtt \
