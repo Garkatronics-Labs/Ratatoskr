@@ -39,6 +39,15 @@ jobs:
             - name: Add Odin to PATH
               run: echo "$PWD/odin-dist" >> $GITHUB_PATH
 
+            - name: Check toolchain
+              run: |
+                  which clang
+                  clang --version
+                  which ld.lld || echo "lld not found"
+
+            - name: Install build tools
+              run: sudo apt-get update && sudo apt-get install -y clang lld
+
             - name: Download rtt (release binary)
               run: |
                   curl -L -o rtt \
@@ -46,7 +55,9 @@ jobs:
                   chmod +x ./rtt
 
             - name: Build project with rtt
-              run: ./rtt build --release
+              run: |
+                  mkdir -p out
+                  ./rtt build --release
 
             - name: Upload artifact
               uses: actions/upload-artifact@v4
