@@ -278,7 +278,7 @@ cmd_init :: proc(path: string) {
 	}
 
 	log.infof("initializing project at %q", dir)
-	file_err := os.write_entire_file(file_path, #load("../template.toml"))
+	file_err := os.write_entire_file(file_path, replace_template(#load("../template.toml"), get_folder_name(path), path, context.allocator))
 
 	if file_err != nil {
 		log.errorf("error: failed to write project.toml: %v", file_err)

@@ -4,6 +4,7 @@ import "core:fmt"
 import "core:log"
 import "core:strings"
 import os "core:os"
+import "core:path/filepath"
 
 // --- enum -> flag string helpers ------------------------------------------
 
@@ -158,4 +159,16 @@ run_command :: proc(command: string) -> bool {
 	if len(stderr) > 0 do fmt.eprint(string(stderr))
 
 	return state.exit_code == 0
+}
+
+replace_template :: proc(text: string, name: string, path: string, allocator := context.allocator) -> string {
+	result, allocated := strings.replace_all(text, "{{name}}", name, allocator)
+	defer delete(result)
+	result2, allocated2 := strings.replace_all(result, "{{path}}", path, allocator)
+	return result2
+}
+
+get_folder_name :: proc(path: string) -> string {
+	trimmed := strings.trim_right(path, "/")
+	return filepath.base(trimmed)
 }

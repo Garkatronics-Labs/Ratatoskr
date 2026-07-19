@@ -1,10 +1,10 @@
 # https://github.com/odin-lang/Odin/wiki/Compiler-Flags
 
 [project]
-name = "???"
+name = "{{name}}"
 version = "0.1.0"
 authors = [""]
-path = "path/to/your/project"
+path = "{{path}}"
 
 [output]
 development = "/out/path"
