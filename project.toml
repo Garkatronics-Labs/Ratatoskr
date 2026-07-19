@@ -12,7 +12,7 @@ release = "./out/rtt"
 debug = "./out/debug-rtt"
 
 [collections]
-libs = "../libs"
+libs = "./libs"
 
 [compiler]
 build_mode      = "exe"
