@@ -13,15 +13,29 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-
-            - name: Install Odin
+            - name: Get Odin release tag
+              id: odin-tag
               run: |
-                  git clone --depth 1 https://github.com/odin-lang/Odin.git
-                  cd Odin
-                  ./build_odin.sh release
-                  echo "$PWD" >> $GITHUB_PATH
+                  tag=$(curl -sL https://api.github.com/repos/odin-lang/Odin/releases/latest | grep '"tag_name"' | cut -d '"' -f4)
+                  echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
-            - uses: actions/checkout@v4
+            - name: Cache Odin
+              id: cache-odin
+              uses: actions/cache@v4
+              with:
+                  path: odin-dist
+                  key: odin-linux-amd64-${{ steps.odin-tag.outputs.tag }}
+
+            - name: Download Odin
+              if: steps.cache-odin.outputs.cache-hit != 'true'
+              run: |
+                  mkdir -p odin-dist
+                  curl -L -o odin.tar.gz \
+                      https://github.com/odin-lang/Odin/releases/download/${{ steps.odin-tag.outputs.tag }}/odin-linux-amd64-${{ steps.odin-tag.outputs.tag }}.tar.gz
+                  tar -xzf odin.tar.gz -C odin-dist --strip-components=1
+
+            - name: Add Odin to PATH
+              run: echo "$PWD/odin-dist" >> $GITHUB_PATH
 
             - name: Download rtt (release binary)
               run: |
