@@ -24,5 +24,4 @@ disallow_do     = false
 
 [compiler.defines]
 
-
 [compiler.raw]
