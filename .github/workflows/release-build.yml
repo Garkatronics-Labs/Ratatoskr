@@ -53,8 +53,8 @@ jobs:
             - name: Download rtt (release binary)
               run: |
                   curl -L -o rtt \
-                  https://github.com/Garkatronics-Labs/Ratatoskr/releases/latest/download/rtt
-                  chmod +x ./rtt
+                  https://github.com/Garkatronics-Labs/Ratatoskr/releases/latest/download/rtt-linux-amd64
+                  chmod +x ./rtt-linux-amd64
 
             - name: Build project with rtt
               run: |
