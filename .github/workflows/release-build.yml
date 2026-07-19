@@ -77,4 +77,7 @@ jobs:
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ steps.tag.outputs.tag }}
-                  files: out/rtt
+                  files: |
+                      out/rtt-linux-amd64
+                      out/debug-rtt-linux-amd64
+                      out/dev-rtt-linux-amd64
