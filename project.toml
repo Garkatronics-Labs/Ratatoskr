@@ -1,5 +1,4 @@
 # https://github.com/odin-lang/Odin/wiki/Compiler-Flags
-
 [project]
 name = "Ratatoskr"
 version = "0.1.0"
