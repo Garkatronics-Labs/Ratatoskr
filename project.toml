@@ -1,7 +1,7 @@
 # https://github.com/odin-lang/Odin/wiki/Compiler-Flags
 [project]
 name = "Ratatoskr"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["@Garkatron"]
 path = "./src"
 tests_path = "./tests"
