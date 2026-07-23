@@ -12,7 +12,7 @@ main :: proc() {
 
 	if len(os.args) < 2 {
 		fmt.eprintln("usage: raratoskr <command> [flags]")
-		fmt.eprintln("commands: build, add-collection, update, init")
+		fmt.eprintln("commands: build, add-collection, update, init, test")
 		os.exit(1)
 	}
 
@@ -24,7 +24,7 @@ main :: proc() {
 		release := false
 		debug := false
 		development := false
-		config_path := ""
+		config_path := "./"
 
 
 
@@ -54,6 +54,25 @@ main :: proc() {
 		}
 
 		cmd_build(release, debug, development, config_path)
+
+	case "test":
+		config_path := "./"
+
+
+
+		for arg in rest {
+
+			switch {
+			case strings.has_prefix(arg, "--config="):
+				config_path = arg[len("--config="):]
+			case:
+				fmt.eprintfln("unknown flag: %s", arg)
+				os.exit(1)
+
+
+			}
+		}
+		cmd_test(config_path)
 
 	case "add-collection":
 		if len(rest) < 1 {
@@ -106,6 +125,54 @@ main :: proc() {
 }
 
 // --- build ---------------------------------------------------------------
+
+cmd_test :: proc(config_path: string) {
+	cfg, ok := load_project_config(config_path)
+	if !ok {
+		log.error("failed to load project config")
+		os.exit(1)
+	}
+
+	b_ok := test_mode(cfg)
+
+	if !b_ok {
+		log.error("test failed")
+		os.exit(1)
+	} else {
+		log.info("test succeeded")
+	}
+}
+
+test_mode :: proc(cfg: Project_Config) -> bool {
+	log.info("test mode")
+
+	sb: strings.Builder
+	strings.builder_init(&sb, context.temp_allocator)
+	fmt.sbprintf(&sb, "odin test %s", cfg.project.tests_path)
+
+	// TODO: extract to a proc and use in helpers add_compiler_options too!
+	for name in cfg.compiler.custom_attributes {
+		fmt.sbprintf(&sb, " -custom-attribute:%s", name)
+	}
+	for k, v in cfg.defines {
+		fmt.sbprintf(&sb, " -define:%s=%s", k, v)
+	}
+	// escape hatch: any flag not modeled above
+	for k, v in cfg.compiler.raw {
+		if v == "" {
+			fmt.sbprintf(&sb, " -%s", k)
+		} else {
+			fmt.sbprintf(&sb, " -%s:%s", k, v)
+		}
+	}
+
+	for name, path in cfg.collections {
+		fmt.sbprintf(&sb, " -collection:%s=%s", name, path)
+	}
+	// TODO END
+
+	return run_command(strings.to_string(sb))
+}
 
 cmd_build :: proc(release, debug, development: bool, config_path: string) {
 	cfg, ok := load_project_config(config_path)

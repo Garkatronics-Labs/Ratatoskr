@@ -4,6 +4,7 @@ name = "Ratatoskr"
 version = "0.1.0"
 authors = ["@Garkatron"]
 path = "./src"
+tests_path = "./tests"
 
 [output]
 development = "./out/dev-rtt-linux-amd64"

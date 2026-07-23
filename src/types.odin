@@ -119,6 +119,7 @@ Project_Config :: struct {
 		version: string,
 		authors: []string,
 		path:    string,
+		tests_path:   string,
 	},
 	output:      map[string]string,
 	collections: map[string]string,
